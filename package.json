@@ -1,0 +1,59 @@
+{
+  "name": "qc-to_bool",
+  "version": "0.0.0",
+  "author": {
+    "name": "Danny Hurlburt",
+    "url": "https://github.com/dhurlburtusa"
+  },
+  "description": "A simple utility to convert various values to a JavaScript boolean.",
+  "keywords": [
+    "boolean",
+    "coerce",
+    "convert",
+    "conversion",
+    "javascript",
+    "to_bool",
+    "typescript",
+    "utility"
+  ],
+  "homepage": "https://github.com/hypersoftllc/qc-to_bool#readme",
+  "bugs": {
+    "url": "https://github.com/hypersoftllc/qc-to_bool/issues"
+  },
+  "license": "ISC",
+  "files": [
+    "src/index.ts"
+  ],
+  "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hypersoftllc/qc-to_bool.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --color --coverage",
+    "travisci": "npm test"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testPathIgnorePatterns": [
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/"
+    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts",
+      "tsx"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^19.2.2",
+    "jest": "^19.0.2",
+    "ts-jest": "^19.0.14",
+    "typescript": "^2.3.2"
+  }
+}
