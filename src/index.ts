@@ -58,6 +58,9 @@ function toBool(input?: any, opts?: { def?: any }): any {
 
   opts = opts || {};
   defValue = opts.hasOwnProperty('def') ? opts.def : null;
+  if (defValue === undefined) {
+    defValue = input;
+  }
 
   if (typeof input == 'boolean') {
     output = input;
@@ -74,12 +77,7 @@ function toBool(input?: any, opts?: { def?: any }): any {
       }
     }
     if (output === undefined) {
-      if (defValue === undefined) {
-        output = input;
-      }
-      else {
-        output = defValue;
-      }
+      output = defValue;
     }
   }
 
