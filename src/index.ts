@@ -47,11 +47,6 @@
  * toBool({ valueOf: function () { return 'yes'; } });  // `true`
  * ```
  *
- * See the Jasmine Specs for more example uses.
- *
- * @function module:Boolean.toBool
- * @see {@link module:Boolean.toBool toBool}
- *
  * @param {?*} input - The value to be converted to a boolean.
  * @param {Object} [opts] - The options to use when doing the conversion.
  * @param {*} [opts.def=null] - The default value to return if unable to convert.
@@ -63,6 +58,9 @@ function toBool(input?: any, opts?: { def?: any }): any {
 
   opts = opts || {};
   defValue = opts.hasOwnProperty('def') ? opts.def : null;
+  if (defValue === undefined) {
+    defValue = input;
+  }
 
   if (typeof input == 'boolean') {
     output = input;
@@ -79,12 +77,7 @@ function toBool(input?: any, opts?: { def?: any }): any {
       }
     }
     if (output === undefined) {
-      if (defValue === undefined) {
-        output = input;
-      }
-      else {
-        output = defValue;
-      }
+      output = defValue;
     }
   }
 
