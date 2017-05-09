@@ -288,7 +288,7 @@ describe('qc-to_bool', () => {
       expect(toBool('undefined', { def: undefined })).toBe('undefined');
     });
 
-    it('called with an input that has a `toString` method that returns a falsey value should return `false`', () => {
+    it('called with an input that has a `toString` method that returns a falsy value should return `false`', () => {
       let input: { toString: () => string };
 
       input = { toString: function () { return '0'; } };
@@ -332,7 +332,7 @@ describe('qc-to_bool', () => {
       expect(toBool(input)).toBe(true);
     });
 
-    it('called with an input that has a `toString` method that returns neither a falsey value or a truthy value should return default value', () => {
+    it('called with an input that has a `toString` method that returns neither a falsy value or a truthy value should return default value', () => {
       let input: { toString: () => string };
 
       input = { toString: function () { return ''; } };
@@ -342,7 +342,7 @@ describe('qc-to_bool', () => {
       expect(toBool(input)).toBeNull();
     });
 
-    it('called with an input that has a `valueOf` method that returns a falsey value should return `false`', () => {
+    it('called with an input that has a `valueOf` method that returns a falsy value should return `false`', () => {
       let input: { valueOf: () => any };
 
       input = { valueOf: function () { return 0; } };
@@ -452,7 +452,7 @@ describe('qc-to_bool', () => {
       expect(toBool(input)).toBe(true);
     });
 
-    it('called with an input that has a `valueOf` method that returns neither a falsey value or a truthy value should return default value', () => {
+    it('called with an input that has a `valueOf` method that returns neither a falsy value or a truthy value should return default value', () => {
       let input: { valueOf: () => any };;
 
       input = { valueOf: function () { return arguments; } };
