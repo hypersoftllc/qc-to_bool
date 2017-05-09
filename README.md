@@ -25,6 +25,7 @@ toBool('No');     // `false`
 toBool('false');  // `false`
 toBool('other');  // `null`
 toBool('other', { def: false });  // `false`
-toBool({});  // `false`
+toBool({});  // `null`
+toBool({}, { def: false });  // `false`
 toBool({ valueOf: function () { return 'yes'; } });  // `true`
 ```
