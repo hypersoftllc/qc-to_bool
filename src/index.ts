@@ -84,11 +84,13 @@ function toBool(input?: any, opts?: { def?: any }): any {
   return output;
 }
 
-interface Lut {
-  [key: string]: boolean
-}
 
 namespace toBool {
+
+  export interface Lut {
+    [key: string]: boolean
+  }
+
   export let lut: Lut = {
     0: false,
     1: true,
@@ -103,6 +105,7 @@ namespace toBool {
     false: false,
     true: true,
   };
+
 }
 
 
