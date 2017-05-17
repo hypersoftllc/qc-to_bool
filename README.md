@@ -1,6 +1,6 @@
 # qc-to_bool
 
-[![Build Status](https://travis-ci.org/hypersoftllc/qc-to_bool.svg?branch=master)](https://travis-ci.org/hypersoftllc/qc-to_bool)
+[![Build Status][travis-svg]][travis-url]
 
 A simple JavaScript utility to convert various values to a boolean.
 
@@ -29,3 +29,7 @@ toBool({});  // `null`
 toBool({}, { def: false });  // `false`
 toBool({ valueOf: function () { return 'yes'; } });  // `true`
 ```
+
+
+[travis-svg]: https://travis-ci.org/hypersoftllc/qc-to_bool.svg?branch=master
+[travis-url]: https://travis-ci.org/hypersoftllc/qc-to_bool
