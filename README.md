@@ -1,6 +1,7 @@
 # qc-to_bool
 
 [![Build Status][travis-svg]][travis-url]
+[![Coverage Status][coverage-image]][coverage-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
@@ -34,6 +35,8 @@ toBool({}, { def: false });  // `false`
 toBool({ valueOf: function () { return 'yes'; } });  // `true`
 ```
 
+[coverage-image]: https://coveralls.io/repos/github/hypersoftllc/qc-to_bool/badge.svg?branch=master
+[coverage-url]: https://coveralls.io/github/hypersoftllc/qc-to_bool?branch=master
 [downloads-image]: http://img.shields.io/npm/dm/qc-to_bool.svg
 [downloads-url]: http://npm-stat.com/charts.html?package=qc-to_bool
 [license-image]: http://img.shields.io/npm/l/qc-to_bool.svg
