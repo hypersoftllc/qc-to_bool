@@ -13,6 +13,7 @@
     "conversion",
     "javascript",
     "toBool",
+    "toBoolOrNull",
     "typescript",
     "utility"
   ],
