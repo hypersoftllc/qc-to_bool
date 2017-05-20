@@ -39,6 +39,8 @@ toBool({}, true);                                     // `true`
 toBool({}, null);                                     // `null`
 toBool({}, { def: false });                           // `false`
 toBool({ valueOf: function () { return 'yes'; } });   // `true`
+toBoolOrNull('other');                                // `null`
+toBoolOrNull({});                                     // `null`
 ```
 
 [coverage-image]: https://coveralls.io/repos/github/hypersoftllc/qc-to_bool/badge.svg?branch=master

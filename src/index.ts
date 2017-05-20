@@ -57,6 +57,8 @@
  * toBool({}, null);                                     // `null`
  * toBool({}, { def: false });                           // `false`
  * toBool({ valueOf: function () { return 'yes'; } });   // `true`
+ * toBoolOrNull('other');                                // `null`
+ * toBoolOrNull({});                                     // `null`
  * ```
  *
  * @param {?*} input - The value to be converted to a boolean.
@@ -128,6 +130,9 @@ namespace toBool {
 }
 
 
+/**
+ * Like `toBool` but returns `null` if input is not convertible to a boolean.
+ */
 function toBoolOrNull(input?: any) {
   return toBool(input, null);
 }
