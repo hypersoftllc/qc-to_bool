@@ -128,5 +128,9 @@ namespace toBool {
 }
 
 
+function toBoolOrNull(input?: any) {
+  return toBool(input, null);
+}
+
 // ==========================================================================
-export { toBool };
+export { toBool, toBoolOrNull };

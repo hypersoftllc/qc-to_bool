@@ -1,5 +1,5 @@
 
-import { toBool } from './index';
+import { toBool, toBoolOrNull } from './index';
 
 describe('qc-to_bool', () => {
 
@@ -1191,6 +1191,7 @@ describe('qc-to_bool', () => {
 
     it('called with `undefined` should return input value', () => {
       let input = undefined;
+
       expect(toBool(input)).toBe(input);
       expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
@@ -1207,6 +1208,45 @@ describe('qc-to_bool', () => {
 
       expect(toBool(input, true)).toBe(true);
       expect(toBool(input, { def: true })).toBe(true);
+    });
+
+  });
+
+  describe('`toBoolOrNull`', () => {
+
+    it('should be a function', () => {
+      expect(typeof toBoolOrNull).toBe('function');
+    });
+
+    it('called with no arguments should return `null`', () => {
+      expect(toBoolOrNull()).toBeNull();
+    });
+
+    it('called with non-convertible input should return `null`', function () {
+      expect(toBoolOrNull(arguments)).toBeNull();
+      expect(toBoolOrNull([])).toBeNull();
+      expect(toBoolOrNull(['not empty'])).toBeNull();
+      expect(toBoolOrNull(new Date())).toBeNull();
+      expect(toBoolOrNull(new Error('Help!'))).toBeNull();
+      expect(toBoolOrNull(function () {})).toBeNull();
+      expect(toBoolOrNull({})).toBeNull();
+      expect(toBoolOrNull({ prop: 'not empty' })).toBeNull();
+      expect(toBoolOrNull(null)).toBeNull();
+      expect(toBoolOrNull(Infinity)).toBeNull();
+      expect(toBoolOrNull(Number.NEGATIVE_INFINITY)).toBeNull();
+      expect(toBoolOrNull(Number.POSITIVE_INFINITY)).toBeNull();
+      expect(toBoolOrNull(NaN)).toBeNull();
+      expect(toBoolOrNull(Number.NaN)).toBeNull();
+      expect(toBoolOrNull(Number.MIN_VALUE)).toBeNull();
+      expect(toBoolOrNull(-1)).toBeNull();
+      expect(toBoolOrNull(2)).toBeNull();
+      expect(toBoolOrNull(Number.MAX_VALUE)).toBeNull();
+      expect(toBoolOrNull(/regexp/)).toBeNull();
+      expect(toBoolOrNull('')).toBeNull();
+      expect(toBoolOrNull('nope')).toBeNull();
+      expect(toBoolOrNull('null')).toBeNull();
+      expect(toBoolOrNull('undefined')).toBeNull();
+      expect(toBoolOrNull(undefined)).toBeNull();
     });
 
   });
