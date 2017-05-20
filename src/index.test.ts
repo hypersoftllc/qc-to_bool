@@ -1,5 +1,5 @@
 
-import { to_bool, toBool } from './index';
+import { toBool, toBoolOrNull } from './index';
 
 describe('qc-to_bool', () => {
 
@@ -9,25 +9,71 @@ describe('qc-to_bool', () => {
       expect(typeof toBool).toBe('function');
     });
 
-    it('called with `arguments` should return default value', function () {
+    it('called with no arguments should return `undefined`', () => {
+      expect(toBool()).toBeUndefined();
+    });
+
+    it('called with `arguments` should return input value', function () {
       let input = arguments;
-      expect(toBool(input)).toBeNull();
-      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with an empty array should return default value', () => {
-      let input: any[] = [];
-      expect(toBool(input)).toBeNull();
+    it('called with `arguments` and default value should return default value', function () {
+      let input = arguments;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
       expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with an empty array should return input value', () => {
+      let input: any[] = [];
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with an empty array and default value should return default value', () => {
+      let input: any[] = [];
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
     it('called with an array should return default value', () => {
       let input = ['not empty'];
-      expect(toBool(input)).toBeNull();
-      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with an array and default value should return default value', () => {
+      let input = ['not empty'];
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
     it('called with `false` should return `false`', () => {
@@ -38,87 +84,299 @@ describe('qc-to_bool', () => {
       expect(toBool(true)).toBe(true);
     });
 
-    it('called with a `Date` object should return default value', () => {
+    it('called with false `Boolean` object should return `false`', () => {
+      let input = new Boolean(false);
+
+      expect(typeof input).toBe('object');
+      expect(input.valueOf()).toBe(false);
+      expect(toBool(input)).toBe(false);
+    });
+
+    it('called with true `Boolean` object should return `true`', () => {
+      let input = new Boolean(true);
+
+      expect(typeof input).toBe('object');
+      expect(input.valueOf()).toBe(true);
+      expect(toBool(input)).toBe(true);
+    });
+
+    it('called with the Epoch `Date` object should return `false`', () => {
+      let input = new Date(0);
+
+      expect(toBool(input)).toBe(false);
+    });
+
+    it('called with a `Date` object should return input value', () => {
       let input = new Date();
-      expect(toBool(input)).toBeNull();
-      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with an `Error` object should return default value', () => {
+    it('called with a `Date` object and default value should return default value', () => {
+      let input = new Date();
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with an `Error` object should return input value', () => {
       let input = new Error('Help!');
-      expect(toBool(input)).toBeNull();
-      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with a function should return default value', () => {
+    it('called with an `Error` object and default value should return default value', () => {
+      let input = new Error('Help!');
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with a function should return input value', () => {
       let input = function () {};
-      expect(toBool(input)).toBeNull();
-      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with an empty object should return default value', () => {
+    it('called with a function and default value should return default value', () => {
+      let input = function () {};
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with an empty object should return input value', () => {
       let input = {};
-      expect(toBool(input)).toBeNull();
-      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with an object should return default value', () => {
+    it('called with an empty object and default value should return default value', () => {
+      let input = {};
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with an object should return input value', () => {
       let input = { prop: 'not empty' };
-      expect(toBool(input)).toBeNull();
-      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
       expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with `null` should return default value', () => {
-      expect(toBool(null)).toBeNull();
-      expect(toBool(null, { def: false })).toBe(false);
-      expect(toBool(null, { def: undefined })).toBe(null);
+    it('called with an object and default value should return default value', () => {
+      let input = { prop: 'not empty' };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
-    it('called with `Infinity` should return default value', () => {
-      expect(toBool(Infinity)).toBeNull();
-      expect(toBool(Infinity, { def: false })).toBe(false);
-      expect(toBool(Infinity, { def: undefined })).toBe(Infinity);
+    it('called with `null` should return input value', () => {
+      let input = null;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with `Number.NEGATIVE_INFINITY` should return default value', () => {
-      expect(toBool(Number.NEGATIVE_INFINITY)).toBeNull();
-      expect(toBool(Number.NEGATIVE_INFINITY, { def: false })).toBe(false);
-      expect(toBool(Number.NEGATIVE_INFINITY, { def: undefined })).toBe(Number.NEGATIVE_INFINITY);
+    it('called with `null` and default value should return default value', () => {
+      let input = null;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
-    it('called with `Number.POSITIVE_INFINITY` should return default value', () => {
-      expect(toBool(Number.POSITIVE_INFINITY)).toBeNull();
-      expect(toBool(Number.POSITIVE_INFINITY, { def: false })).toBe(false);
-      expect(toBool(Number.POSITIVE_INFINITY, { def: undefined })).toBe(Number.POSITIVE_INFINITY);
+    it('called with `Infinity` should return input value', () => {
+      let input = Infinity;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with `NaN` should return default value', () => {
-      expect(toBool(NaN)).toBeNull();
-      expect(toBool(NaN, { def: false })).toBe(false);
-      expect(toBool(NaN, { def: undefined })).toEqual(NaN);
+    it('called with `Infinity` and default value should return default value', () => {
+      let input = Infinity;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
-    it('called with `Number.NaN` should return default value', () => {
-      expect(toBool(Number.NaN)).toBeNull();
-      expect(toBool(Number.NaN, { def: false })).toBe(false);
-      expect(toBool(Number.NaN, { def: undefined })).toEqual(NaN);
+    it('called with `Number.NEGATIVE_INFINITY` should return input value', () => {
+      let input = Number.NEGATIVE_INFINITY;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with `Number.MIN_VALUE` should return default value', () => {
-      expect(toBool(Number.MIN_VALUE)).toBeNull();
-      expect(toBool(Number.MIN_VALUE, { def: false })).toBe(false);
-      expect(toBool(Number.MIN_VALUE, { def: undefined })).toBe(Number.MIN_VALUE);
+    it('called with `Number.NEGATIVE_INFINITY` and default value should return default value', () => {
+      let input = Number.NEGATIVE_INFINITY;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
-    it('called with `-1` should return default value', () => {
-      expect(toBool(-1)).toBeNull();
-      expect(toBool(-1, { def: false })).toBe(false);
-      expect(toBool(-1, { def: undefined })).toBe(-1);
+    it('called with `Number.POSITIVE_INFINITY` should return input value', () => {
+      let input = Number.POSITIVE_INFINITY;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with `Number.POSITIVE_INFINITY` and default value should return default value', () => {
+      let input = Number.POSITIVE_INFINITY;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with `NaN` should return input value', () => {
+      let input = NaN;
+
+      expect(toBool(input)).toEqual(input);
+      expect(toBool(input, undefined)).toEqual(input);
+      expect(toBool(input, { def: undefined })).toEqual(input);
+    });
+
+    it('called with `NaN` and default value should return default value', () => {
+      let input = NaN;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with `Number.NaN` should return input value', () => {
+      let input = Number.NaN;
+
+      expect(toBool(input)).toEqual(input);
+      expect(toBool(input, undefined)).toEqual(input);
+      expect(toBool(input, { def: undefined })).toEqual(input);
+    });
+
+    it('called with `Number.NaN` and default value should return default value', () => {
+      let input = Number.NaN;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with `Number.MIN_VALUE` should return input value', () => {
+      let input = Number.MIN_VALUE;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with `Number.MIN_VALUE` and default value should return default value', () => {
+      let input = Number.MIN_VALUE;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with `-1` should return input value', () => {
+      let input = -1;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with `-1` and default value should return default value', () => {
+      let input = -1;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
     it('called with `-0` should return `false`', () => {
@@ -133,28 +391,88 @@ describe('qc-to_bool', () => {
       expect(toBool(1)).toBe(true);
     });
 
-    it('called with `2` should return default value', () => {
-      expect(toBool(2)).toBeNull();
-      expect(toBool(2, { def: false })).toBe(false);
-      expect(toBool(2, { def: undefined })).toBe(2);
+    it('called with `2` should return input value', () => {
+      let input = 2;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with `Number.MAX_VALUE` should return default value', () => {
-      expect(toBool(Number.MAX_VALUE)).toBeNull();
-      expect(toBool(Number.MAX_VALUE, { def: false })).toBe(false);
-      expect(toBool(Number.MAX_VALUE, { def: undefined })).toBe(Number.MAX_VALUE);
+    it('called with `2` and default value should return default value', () => {
+      let input = 2;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
-    it('called with a regexp should return default value', () => {
-      expect(toBool(/regexp/)).toBeNull();
-      expect(toBool(/regexp/, { def: false })).toBe(false);
-      expect(toBool(/regexp/, { def: undefined })).toEqual(/regexp/);
+    it('called with `Number.MAX_VALUE` should return input value', () => {
+      let input = Number.MAX_VALUE;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with an empty string should return default value', () => {
-      expect(toBool('')).toBeNull();
-      expect(toBool('', { def: false })).toBe(false);
-      expect(toBool('', { def: undefined })).toBe('');
+    it('called with `Number.MAX_VALUE` and default value should return default value', () => {
+      let input = Number.MAX_VALUE;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with a regexp should return input value', () => {
+      let input = /regexp/;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with a regexp and default value should return default value', () => {
+      let input = /regexp/;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with an empty string should return input value', () => {
+      let input = '';
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with an empty string and default value should return default value', () => {
+      let input = '';
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
     it('called with `"0"` should return `false`', () => {
@@ -212,16 +530,46 @@ describe('qc-to_bool', () => {
       expect(toBool('NO')).toBe(false);
     });
 
-    it('called with `"nope"` should return default value', () => {
-      expect(toBool('nope')).toBeNull();
-      expect(toBool('nope', { def: false })).toBe(false);
-      expect(toBool('nope', { def: undefined })).toBe('nope');
+    it('called with `"nope"` should return input value', () => {
+      let input = 'nope';
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with `"null"` should return default value', () => {
-      expect(toBool('null')).toBeNull();
-      expect(toBool('null', { def: false })).toBe(false);
-      expect(toBool('null', { def: undefined })).toBe('null');
+    it('called with `"nope"` and default value should return default value', () => {
+      let input = 'nope';
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with `"null"` should return input value', () => {
+      let input = 'null';
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with `"null"` and default value should return default value', () => {
+      let input = 'null';
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
     it('called with `"off"` should return `false`', () => {
@@ -282,10 +630,25 @@ describe('qc-to_bool', () => {
       expect(toBool('YES')).toBe(true);
     });
 
-    it('called with `"undefined"` should return default value', () => {
-      expect(toBool('undefined')).toBeNull();
-      expect(toBool('undefined', { def: false })).toBe(false);
-      expect(toBool('undefined', { def: undefined })).toBe('undefined');
+    it('called with `"undefined"` should return input value', () => {
+      let input = 'undefined';
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with `"undefined"` and default value should return default value', () => {
+      let input = 'undefined';
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
     it('called with an input that has a `toString` method that returns a falsy value should return `false`', () => {
@@ -332,14 +695,44 @@ describe('qc-to_bool', () => {
       expect(toBool(input)).toBe(true);
     });
 
-    it('called with an input that has a `toString` method that returns neither a falsy value or a truthy value should return default value', () => {
+    it('called with an input that has a `toString` method that returns neither a falsy value or a truthy value should return input value', () => {
       let input: { toString: () => string };
 
       input = { toString: function () { return ''; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { toString: function () { return 'asdf'; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with an input that has a `toString` method that returns neither a falsy value or a truthy value and default value should return default value', () => {
+      let input: { toString: () => string };
+
+      input = { toString: function () { return ''; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { toString: function () { return 'asdf'; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
     it('called with an input that has a `valueOf` method that returns a falsy value should return `false`', () => {
@@ -452,89 +845,408 @@ describe('qc-to_bool', () => {
       expect(toBool(input)).toBe(true);
     });
 
-    it('called with an input that has a `valueOf` method that returns neither a falsy value or a truthy value should return default value', () => {
+    it('called with an input that has a `valueOf` method that returns neither a falsy value or a truthy value should return input value', () => {
       let input: { valueOf: () => any };;
 
       input = { valueOf: function () { return arguments; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return []; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return ['not empty']; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return new Date(); } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return new Error('Error'); } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return new Error('true'); } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return function () { return true; }; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return {}; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return{ prop: 'not empty', }; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return null; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return Infinity; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return Number.NEGATIVE_INFINITY; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return Number.POSITIVE_INFINITY; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return NaN; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return Number.NaN; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return Number.MIN_VALUE; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return Number.MAX_VALUE; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return /regexp/; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return ''; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return 'not empty'; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
 
       input = { valueOf: function () { return; } };
-      expect(toBool(input)).toBeNull();
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
     });
 
-    it('called with `undefined` should return default value', () => {
-      expect(toBool(undefined)).toBeNull();
-      expect(toBool(undefined, { def: false })).toBe(false);
-      expect(toBool(undefined, { def: undefined })).toBeUndefined();
+    it('called with an input that has a `valueOf` method that returns neither a falsy value or a truthy value and default value should return default value', () => {
+      let input: { valueOf: () => any };;
+
+      input = { valueOf: function () { return arguments; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return []; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return ['not empty']; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return new Date(); } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return new Error('Error'); } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return new Error('true'); } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return function () { return true; }; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return {}; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return{ prop: 'not empty', }; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return null; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return Infinity; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return Number.NEGATIVE_INFINITY; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return Number.POSITIVE_INFINITY; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return NaN; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return Number.NaN; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return Number.MIN_VALUE; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return Number.MAX_VALUE; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return /regexp/; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return ''; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return 'not empty'; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+
+      input = { valueOf: function () { return; } };
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
+    });
+
+    it('called with `undefined` should return input value', () => {
+      let input = undefined;
+
+      expect(toBool(input)).toBe(input);
+      expect(toBool(input, undefined)).toBe(input);
+      expect(toBool(input, { def: undefined })).toBe(input);
+    });
+
+    it('called with `undefined` and default value should return default value', () => {
+      let input = undefined;
+
+      expect(toBool(input, null)).toBeNull();
+      expect(toBool(input, { def: null })).toBeNull();
+
+      expect(toBool(input, false)).toBe(false);
+      expect(toBool(input, { def: false })).toBe(false);
+
+      expect(toBool(input, true)).toBe(true);
+      expect(toBool(input, { def: true })).toBe(true);
     });
 
   });
 
-  describe('`to_bool`', () => {
+  describe('`toBoolOrNull`', () => {
 
     it('should be a function', () => {
-      expect(typeof to_bool).toBe('function');
+      expect(typeof toBoolOrNull).toBe('function');
     });
 
-    it('should be an alias of `toBool`', () => {
-      expect(to_bool).toBe(toBool);
+    it('called with no arguments should return `null`', () => {
+      expect(toBoolOrNull()).toBeNull();
+    });
+
+    it('called with non-convertible input should return `null`', function () {
+      expect(toBoolOrNull(arguments)).toBeNull();
+      expect(toBoolOrNull([])).toBeNull();
+      expect(toBoolOrNull(['not empty'])).toBeNull();
+      expect(toBoolOrNull(new Date())).toBeNull();
+      expect(toBoolOrNull(new Error('Help!'))).toBeNull();
+      expect(toBoolOrNull(function () {})).toBeNull();
+      expect(toBoolOrNull({})).toBeNull();
+      expect(toBoolOrNull({ prop: 'not empty' })).toBeNull();
+      expect(toBoolOrNull(null)).toBeNull();
+      expect(toBoolOrNull(Infinity)).toBeNull();
+      expect(toBoolOrNull(Number.NEGATIVE_INFINITY)).toBeNull();
+      expect(toBoolOrNull(Number.POSITIVE_INFINITY)).toBeNull();
+      expect(toBoolOrNull(NaN)).toBeNull();
+      expect(toBoolOrNull(Number.NaN)).toBeNull();
+      expect(toBoolOrNull(Number.MIN_VALUE)).toBeNull();
+      expect(toBoolOrNull(-1)).toBeNull();
+      expect(toBoolOrNull(2)).toBeNull();
+      expect(toBoolOrNull(Number.MAX_VALUE)).toBeNull();
+      expect(toBoolOrNull(/regexp/)).toBeNull();
+      expect(toBoolOrNull('')).toBeNull();
+      expect(toBoolOrNull('nope')).toBeNull();
+      expect(toBoolOrNull('null')).toBeNull();
+      expect(toBoolOrNull('undefined')).toBeNull();
+      expect(toBoolOrNull(undefined)).toBeNull();
     });
 
   });
