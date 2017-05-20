@@ -113,4 +113,4 @@ namespace toBool {
 
 
 // ==========================================================================
-export { toBool, toBool as to_bool };
+export { toBool };

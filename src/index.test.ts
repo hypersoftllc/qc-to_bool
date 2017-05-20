@@ -1,5 +1,5 @@
 
-import { to_bool, toBool } from './index';
+import { toBool } from './index';
 
 describe('qc-to_bool', () => {
 
@@ -523,18 +523,6 @@ describe('qc-to_bool', () => {
       expect(toBool(undefined)).toBeNull();
       expect(toBool(undefined, { def: false })).toBe(false);
       expect(toBool(undefined, { def: undefined })).toBeUndefined();
-    });
-
-  });
-
-  describe('`to_bool`', () => {
-
-    it('should be a function', () => {
-      expect(typeof to_bool).toBe('function');
-    });
-
-    it('should be an alias of `toBool`', () => {
-      expect(to_bool).toBe(toBool);
     });
 
   });
