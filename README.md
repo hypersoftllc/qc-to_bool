@@ -22,17 +22,25 @@ npm install --save qc-to_bool
 ```js
 import { toBool } from 'qc-to_bool';
 
-toBool(true);     // `true`
-toBool('Yes');    // `true`
-toBool('true');   // `true`
-toBool(false);    // `false`
-toBool('No');     // `false`
-toBool('false');  // `false`
-toBool('other');  // `null`
-toBool('other', { def: false });  // `false`
-toBool({});  // `null`
-toBool({}, { def: false });  // `false`
-toBool({ valueOf: function () { return 'yes'; } });  // `true`
+toBool(new Boolean(true));                            // `true`
+toBool(new Boolean(false));                           // `false`
+toBool(true);                                         // `true`
+toBool('Yes');                                        // `true`
+toBool('true');                                       // `true`
+toBool(false);                                        // `false`
+toBool('No');                                         // `false`
+toBool('false');                                      // `false`
+toBool('other');                                      // `'other'` (input)
+toBool('other', false);                               // `false`
+toBool('other', { def: false });                      // `false`
+toBool({});                                           // `{}` (input)
+toBool({}, false);                                    // `false`
+toBool({}, true);                                     // `true`
+toBool({}, null);                                     // `null`
+toBool({}, { def: false });                           // `false`
+toBool({ valueOf: function () { return 'yes'; } });   // `true`
+toBoolOrNull('other');                                // `null`
+toBoolOrNull({});                                     // `null`
 ```
 
 [coverage-image]: https://coveralls.io/repos/github/hypersoftllc/qc-to_bool/badge.svg?branch=master

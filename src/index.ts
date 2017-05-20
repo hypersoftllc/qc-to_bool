@@ -1,7 +1,11 @@
 
 // ==========================================================================
 /**
- * Attempts to convert given input to a boolean (primitive).
+ * Attempts to convert a boolean-like input to a JavaScript boolean (primitive).
+ *
+ * If the boolean-like input cannot be converted to a boolean, then the default
+ * value is returned.  When the default value is undefined, then the input is
+ * returned.
  *
  * The following values return `false`:
  *
@@ -29,41 +33,46 @@
  * - `'Y'`
  * - `'yes'` and any case variation like `'Yes'`.
  *
- * All other values return the default value (`null` by default).
+ * All other values return the default value (undefined by default).
  *
  * NOTE: This function behaves differently than the native `Boolean` constructor
  * function which returns `true` or `false` based on the JavaScript truthiness of
  * the given value.
  *
  * ```js
- * toBool(true);     // `true`
- * toBool('Yes');    // `true`
- * toBool('true');   // `true`
- * toBool(false);    // `false`
- * toBool('No');     // `false`
- * toBool('false');  // `false`
- * toBool('other');  // `null`
- * toBool('other', { def: false });  // `false`
- * toBool({});  // `null`
- * toBool({}, { def: false });  // `false`
- * toBool({ valueOf: function () { return 'yes'; } });  // `true`
+ * toBool(new Boolean(true));                            // `true`
+ * toBool(new Boolean(false));                           // `false`
+ * toBool(true);                                         // `true`
+ * toBool('Yes');                                        // `true`
+ * toBool('true');                                       // `true`
+ * toBool(false);                                        // `false`
+ * toBool('No');                                         // `false`
+ * toBool('false');                                      // `false`
+ * toBool('other');                                      // `'other'` (input)
+ * toBool('other', false);                               // `false`
+ * toBool('other', { def: false });                      // `false`
+ * toBool({});                                           // `{}` (input)
+ * toBool({}, false);                                    // `false`
+ * toBool({}, true);                                     // `true`
+ * toBool({}, null);                                     // `null`
+ * toBool({}, { def: false });                           // `false`
+ * toBool({ valueOf: function () { return 'yes'; } });   // `true`
+ * toBoolOrNull('other');                                // `null`
+ * toBoolOrNull({});                                     // `null`
  * ```
  *
  * @param {?*} input - The value to be converted to a boolean.
  * @param {Object} [opts] - The options to use when doing the conversion.
- * @param {*} [opts.def=null] - The default value to return if unable to convert.
+ * @param {*} [opts.def=undefined] - The default value to return if unable to
+ *   convert.  This is allowed to be of any data type.  A value of `undefined`
+ *   means return the input when not convertable.
  *
- * @returns {(boolean|null|*)} The input converted to a boolean or the default
- *   value if unable to convert.
+ * @returns {(boolean|*)} The input converted to a boolean or the default
+ *   value if unable to convert.  Note: a value of type boolean is not always
+ *   returned when the default value is returned.
  */
 function toBool(input?: any, opts?: { def?: any }): any {
-  let coercedInput: any, defValue: any, output: boolean;
-
-  opts = opts || {};
-  defValue = opts.hasOwnProperty('def') ? opts.def : null;
-  if (defValue === undefined) {
-    defValue = input;
-  }
+  let coercedInput: any, def: any, output: any;
 
   if (typeof input == 'boolean') {
     output = input;
@@ -74,13 +83,22 @@ function toBool(input?: any, opts?: { def?: any }): any {
       if (coercedInput && typeof coercedInput.toString == 'function') {
         coercedInput = coercedInput.toString().toLowerCase();
       }
-      // The following check ensures only a boolean is returned.
-      if (toBool.lut.hasOwnProperty(coercedInput)) {
-        output = toBool.lut[coercedInput];
-      }
+      output = toBool.lut[coercedInput];
     }
+
     if (output === undefined) {
-      output = defValue;
+      // Resolve default value:
+      if (typeof opts == 'object' && opts !== null) {
+        def = opts.def;
+      }
+      else {
+        def = opts;
+      }
+      if (def === undefined) {
+        def = input;
+      }
+
+      output = def;
     }
   }
 
@@ -112,5 +130,12 @@ namespace toBool {
 }
 
 
+/**
+ * Like `toBool` but returns `null` if input is not convertible to a boolean.
+ */
+function toBoolOrNull(input?: any) {
+  return toBool(input, null);
+}
+
 // ==========================================================================
-export { toBool, toBool as to_bool };
+export { toBool, toBoolOrNull };
