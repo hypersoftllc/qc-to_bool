@@ -31,8 +31,9 @@
  *
  * All other values return the default value (`null` by default).
  *
- * NOTE: This function behaves differently than the native `Boolean` constructor function which returns `true` or
- * `false` based on the JavaScript truthiness of the given value.
+ * NOTE: This function behaves differently than the native `Boolean` constructor
+ * function which returns `true` or `false` based on the JavaScript truthiness of
+ * the given value.
  *
  * ```js
  * toBool(true);     // `true`
@@ -51,7 +52,8 @@
  * @param {Object} [opts] - The options to use when doing the conversion.
  * @param {*} [opts.def=null] - The default value to return if unable to convert.
  *
- * @returns {(boolean|null|*)} The input converted to a boolean or the default value if unable to convert.
+ * @returns {(boolean|null|*)} The input converted to a boolean or the default
+ *   value if unable to convert.
  */
 function toBool(input?: any, opts?: { def?: any }): any {
   let coercedInput: any, defValue: any, output: boolean;
