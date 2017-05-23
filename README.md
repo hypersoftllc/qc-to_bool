@@ -25,11 +25,21 @@ import { toBool } from 'qc-to_bool';
 toBool(new Boolean(true));                            // `true`
 toBool(new Boolean(false));                           // `false`
 toBool(true);                                         // `true`
-toBool('Yes');                                        // `true`
-toBool('true');                                       // `true`
 toBool(false);                                        // `false`
-toBool('No');                                         // `false`
+toBool(1);                                            // `true`
+toBool(0);                                            // `false`
+toBool('1');                                          // `true`
+toBool('0');                                          // `false`
+toBool('t');                                          // `true`
+toBool('f');                                          // `false`
+toBool('Y');                                          // `true`
+toBool('N');                                          // `false`
+toBool('on');                                         // `true`
+toBool('off');                                        // `false`
+toBool('true');                                       // `true`
 toBool('false');                                      // `false`
+toBool('Yes');                                        // `true`
+toBool('No');                                         // `false`
 toBool('other');                                      // `'other'` (input)
 toBool('other', false);                               // `false`
 toBool('other', { def: false });                      // `false`
@@ -38,7 +48,9 @@ toBool({}, false);                                    // `false`
 toBool({}, true);                                     // `true`
 toBool({}, null);                                     // `null`
 toBool({}, { def: false });                           // `false`
-toBool({ valueOf: function () { return 'yes'; } });   // `true`
+toBool({ valueOf () { return 'yes'; } });             // `true`
+toBoolOrNull(false);                                  // `false`
+toBoolOrNull('1');                                    // `true`
 toBoolOrNull('other');                                // `null`
 toBoolOrNull({});                                     // `null`
 ```

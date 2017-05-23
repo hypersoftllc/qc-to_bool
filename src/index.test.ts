@@ -1222,7 +1222,7 @@ describe('qc-to_bool', () => {
       expect(toBoolOrNull()).toBeNull();
     });
 
-    it('called with non-convertible input should return `null`', function () {
+    it('called with inconvertible input should return `null`', function () {
       expect(toBoolOrNull(arguments)).toBeNull();
       expect(toBoolOrNull([])).toBeNull();
       expect(toBoolOrNull(['not empty'])).toBeNull();
