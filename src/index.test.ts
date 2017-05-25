@@ -1210,6 +1210,41 @@ describe('qc-to_bool', () => {
       expect(toBool(input, { def: true })).toBe(true);
     });
 
+    describe('`resetConverter`', () => {
+
+      it('should be a function', () => {
+        expect(typeof toBool.resetConverter).toBe('function');
+      });
+
+      it('when called should reset the converter back to the original converter', () => {
+        expect(toBool('')).toBe('');
+        toBool.setConverter((x) => !!x);
+        expect(toBool('')).toBe(false);
+        toBool.resetConverter();
+        expect(toBool('')).toBe('');
+      });
+
+    });
+
+    describe('`setConverter`', () => {
+
+      it('should be a function', () => {
+        expect(typeof toBool.setConverter).toBe('function');
+      });
+
+      it('when called should update the converter used to do the calculation', () => {
+        expect(toBool('')).toBe('');
+        try {
+          toBool.setConverter((x) => !!x);
+          expect(toBool('')).toBe(false);
+        } finally {
+          toBool.resetConverter();
+          expect(toBool('')).toBe('');
+        }
+      });
+
+    });
+
   });
 
   describe('`toBoolOrNull`', () => {

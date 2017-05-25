@@ -1,4 +1,40 @@
 
+interface Lut {
+  [key: string]: boolean
+}
+
+let lut: Lut = {
+  0: false,
+  1: true,
+  f: false,
+  t: true,
+  n: false,
+  y: true,
+  on: true,
+  off: false,
+  no: false,
+  yes: true,
+  false: false,
+  true: true,
+};
+
+function converter(input?: any): any {
+  let coercedInput: any, output: any;
+
+  if (input !== undefined && input !== null && typeof input.valueOf == 'function') {
+    coercedInput = input.valueOf();
+    if (coercedInput && typeof coercedInput.toString == 'function') {
+      coercedInput = coercedInput.toString().toLowerCase();
+    }
+    output = lut[coercedInput];
+  }
+  return output;
+}
+
+let _ = {
+  converter: converter
+};
+
 // ==========================================================================
 /**
  * Attempts to convert a boolean-like input to a JavaScript boolean primitive.
@@ -96,15 +132,9 @@ function toBool(input?: any, def?: any | { def?: any }): any {
     output = input;
   }
   else {
-    if (input !== undefined && input !== null && typeof input.valueOf == 'function') {
-      coercedInput = input.valueOf();
-      if (coercedInput && typeof coercedInput.toString == 'function') {
-        coercedInput = coercedInput.toString().toLowerCase();
-      }
-      output = toBool.lut[coercedInput];
-    }
+    output = _.converter(input);
 
-    if (output === undefined) {
+    if (typeof output != 'boolean') {
       // Resolve default value:
       if (typeof def == 'object' && def !== null) {
         def = def.def;
@@ -123,26 +153,18 @@ function toBool(input?: any, def?: any | { def?: any }): any {
   return output;
 }
 
-
 namespace toBool {
 
-  export interface Lut {
-    [key: string]: boolean
+  export interface Converter {
+    (input?: any): any
   }
 
-  export let lut: Lut = {
-    0: false,
-    1: true,
-    f: false,
-    t: true,
-    n: false,
-    y: true,
-    on: true,
-    off: false,
-    no: false,
-    yes: true,
-    false: false,
-    true: true,
+  export let resetConverter: () => void = function () {
+    _.converter = converter;
+  };
+
+  export let setConverter: (converter: Converter) => void = function (converter: Converter) {
+    _.converter = converter;
   };
 
 }
