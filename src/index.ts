@@ -125,7 +125,7 @@ let _ = {
  *   value if unable to convert.  Note: a value of type boolean is not always
  *   returned when the default value is returned.
  */
-function toBool(input?: any, def?: any | { def?: any }): any {
+function toBool(input?: any, def?: any | { def: any }): any {
   let coercedInput: any, output: any;
 
   if (typeof input == 'boolean') {
@@ -136,7 +136,7 @@ function toBool(input?: any, def?: any | { def?: any }): any {
 
     if (typeof output != 'boolean') {
       // Resolve default value:
-      if (typeof def == 'object' && def !== null) {
+      if (typeof def == 'object' && def !== null && def.hasOwnProperty('def')) {
         def = def.def;
       }
       else {
