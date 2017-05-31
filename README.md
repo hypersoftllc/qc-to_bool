@@ -20,7 +20,7 @@ npm install --save qc-to_bool
 ## Example Usage
 
 ```js
-import { toBool } from 'qc-to_bool';
+import { toBool, toBoolOrNull } from 'qc-to_bool';
 
 toBool(new Boolean(true));                            // `true`
 toBool(new Boolean(false));                           // `false`
