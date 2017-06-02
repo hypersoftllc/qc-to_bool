@@ -65,12 +65,14 @@ toBool({});                                 // `true`
 let converter = (input) => {
   let coercedInput, output;
 
-  if (input !== undefined && input !== null && typeof input.valueOf == 'function') {
-    coercedInput = input.valueOf();
-    if (coercedInput && typeof coercedInput.toString == 'function') {
-      coercedInput = coercedInput.toString().toLowerCase();
+  if (input !== undefined && input !== null) {
+    if (typeof input.valueOf == 'function') {
+      coercedInput = input.valueOf();
+      if (coercedInput && typeof coercedInput.toString == 'function') {
+        coercedInput = coercedInput.toString().toLowerCase();
+      }
+      output = converter.lut[coercedInput];
     }
-    output = converter.lut[coercedInput];
   }
   return output;
 };
