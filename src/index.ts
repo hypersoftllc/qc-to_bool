@@ -114,7 +114,7 @@ let _ = {
  * @param {*=} input - The value to be converted to a JavaScript boolean
  *   primitive.  This may also be an object with a custom `valueOf` method that
  *   returns a number or parsible string.
- * @param {*=|{ def=: *}=} [def=undefined] - The default value to return if
+ * @param {*=|{ def: *}=} [def=undefined] - The default value to return if
  *   unable to convert.  This is allowed to be of any data type.  This may also
  *   be an object with a `def` property.  To return an object as a default value,
  *   then wrap it in an object with a `def` property set to the object that is to

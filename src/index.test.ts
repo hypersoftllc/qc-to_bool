@@ -1921,10 +1921,46 @@ describe('qc-to_bool', () => {
       });
 
       it('when called should update the converter used to do the calculation', () => {
+        let converter;
+
         expect(toBool('')).toBe('');
         try {
-          toBool.setConverter((x) => !!x);
+          converter = (x) => !!x;
+          toBool.setConverter(converter);
           expect(toBool('')).toBe(false);
+        } finally {
+          toBool.resetConverter();
+          expect(toBool('')).toBe('');
+        }
+
+        expect(toBool('H')).toBe('H');
+        expect(toBool('Hai')).toBe('Hai');
+        expect(toBool('I')).toBe('I');
+        expect(toBool('Iie')).toBe('Iie');
+        try {
+          converter = (input) => {
+            let coercedInput: any, output: any;
+
+            if (input !== undefined && input !== null && typeof input.valueOf == 'function') {
+              coercedInput = input.valueOf();
+              if (coercedInput && typeof coercedInput.toString == 'function') {
+                coercedInput = coercedInput.toString().toLowerCase();
+              }
+              output = converter.lut[coercedInput];
+            }
+            return output;
+          };
+          converter.lut = {
+            h: true,
+            hai: true,
+            i: false,
+            iie: false,
+          };
+          toBool.setConverter(converter);
+          expect(toBool('H')).toBe(true);
+          expect(toBool('Hai')).toBe(true);
+          expect(toBool('I')).toBe(false);
+          expect(toBool('Iie')).toBe(false);
         } finally {
           toBool.resetConverter();
           expect(toBool('')).toBe('');

@@ -22,37 +22,70 @@ npm install --save qc-to_bool
 ```js
 import { toBool, toBoolOrNull } from 'qc-to_bool';
 
-toBool(new Boolean(true));                            // `true`
-toBool(new Boolean(false));                           // `false`
-toBool(true);                                         // `true`
-toBool(false);                                        // `false`
-toBool(1);                                            // `true`
-toBool(0);                                            // `false`
-toBool('1');                                          // `true`
-toBool('0');                                          // `false`
-toBool('t');                                          // `true`
-toBool('f');                                          // `false`
-toBool('Y');                                          // `true`
-toBool('N');                                          // `false`
-toBool('on');                                         // `true`
-toBool('off');                                        // `false`
-toBool('true');                                       // `true`
-toBool('false');                                      // `false`
-toBool('Yes');                                        // `true`
-toBool('No');                                         // `false`
-toBool('other');                                      // `'other'` (input)
-toBool('other', false);                               // `false`
-toBool('other', { def: false });                      // `false`
-toBool({});                                           // `{}` (input)
-toBool({}, false);                                    // `false`
-toBool({}, true);                                     // `true`
-toBool({}, null);                                     // `null`
-toBool({}, { def: false });                           // `false`
-toBool({ valueOf () { return 'yes'; } });             // `true`
-toBoolOrNull(false);                                  // `false`
-toBoolOrNull('1');                                    // `true`
-toBoolOrNull('other');                                // `null`
-toBoolOrNull({});                                     // `null`
+toBool(new Boolean(true));                  // `true`
+toBool(new Boolean(false));                 // `false`
+toBool(true);                               // `true`
+toBool(false);                              // `false`
+toBool(1);                                  // `true`
+toBool(0);                                  // `false`
+toBool('1');                                // `true`
+toBool('0');                                // `false`
+toBool('t');                                // `true`
+toBool('f');                                // `false`
+toBool('Y');                                // `true`
+toBool('N');                                // `false`
+toBool('on');                               // `true`
+toBool('off');                              // `false`
+toBool('true');                             // `true`
+toBool('false');                            // `false`
+toBool('Yes');                              // `true`
+toBool('No');                               // `false`
+toBool('other');                            // `'other'` (input)
+toBool('other', false);                     // `false`
+toBool('other', { def: false });            // `false`
+toBool({});                                 // `{}` (input)
+toBool({}, false);                          // `false`
+toBool({}, true);                           // `true`
+toBool({}, null);                           // `null`
+toBool({}, { def: false });                 // `false`
+toBool({ valueOf () { return 'yes'; } });   // `true`
+toBoolOrNull(false);                        // `false`
+toBoolOrNull('1');                          // `true`
+toBoolOrNull('other');                      // `null`
+toBoolOrNull({});                           // `null`
+
+// Use different converter:
+toBool('');                                 // `''` (input)
+// Based on JavaScript truthiness:
+toBool.setConverter(x => !!x);
+toBool('');                                 // `false`
+toBool({});                                 // `true`
+
+// Based on Japanese language:
+let converter = (input) => {
+  let coercedInput, output;
+
+  if (input !== undefined && input !== null && typeof input.valueOf == 'function') {
+    coercedInput = input.valueOf();
+    if (coercedInput && typeof coercedInput.toString == 'function') {
+      coercedInput = coercedInput.toString().toLowerCase();
+    }
+    output = converter.lut[coercedInput];
+  }
+  return output;
+};
+converter.lut = {
+  h: true,
+  hai: true,
+  i: false,
+  iie: false,
+};
+toBool.setConverter(converter);
+toBool('hai');                              // `true`
+toBool('iie');                              // `false`
+
+// Set back to default converter:
+toBool.resetConverter();
 ```
 
 [coverage-image]: https://coveralls.io/repos/github/hypersoftllc/qc-to_bool/badge.svg?branch=master
